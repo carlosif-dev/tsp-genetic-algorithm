@@ -26,15 +26,12 @@ def generate_initial_population(pop_size, elements):
 
 
 def fitness(individual, dictionary):
-    total_dist = 0
-    for i in range(len(individual) - 1):
-        element1 = dictionary[individual[i]]
-        element2 = dictionary[individual[i + 1]]
-        total_dist += distance(element1, element2)
-
-    element1 = dictionary[individual[-1]]
-    element2 = dictionary[individual[0]]
-    total_dist += distance(element1, element2)  # Complete the loop
+    cities_coords = np.array([dictionary[city] for city in individual])
+    distances = np.linalg.norm(np.diff(cities_coords, axis=0), axis=1)
+    total_dist = np.sum(distances)
+    total_dist += np.linalg.norm(
+        cities_coords[-1] - cities_coords[0]
+    )  # Complete the loop
     return total_dist
 
 
